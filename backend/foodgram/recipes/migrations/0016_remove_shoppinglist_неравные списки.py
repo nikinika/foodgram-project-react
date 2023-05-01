@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('recipes', '0015_alter_ingredrecipe_amount'),
+        ("recipes", "0015_alter_ingredrecipe_amount"),
     ]
 
     operations = [
         migrations.RemoveConstraint(
-            model_name='shoppinglist',
-            name='Неравные списки',
+            model_name="shoppinglist",
+            name="Неравные списки",
         ),
     ]

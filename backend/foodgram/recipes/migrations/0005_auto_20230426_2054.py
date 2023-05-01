@@ -5,25 +5,37 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('recipes', '0004_auto_20230426_1942'),
+        ("recipes", "0004_auto_20230426_1942"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='tag',
-            name='color',
-            field=models.CharField(max_length=7, null=True, validators=[django.core.validators.RegexValidator('^#([a-fA-F0-9]{6})')], verbose_name='Цвет в HEX'),
+            model_name="tag",
+            name="color",
+            field=models.CharField(
+                max_length=7,
+                null=True,
+                validators=[
+                    django.core.validators.RegexValidator("^#([a-fA-F0-9]{6})")
+                ],
+                verbose_name="Цвет в HEX",
+            ),
         ),
         migrations.AlterField(
-            model_name='tag',
-            name='name',
-            field=models.CharField(max_length=200, verbose_name='Название'),
+            model_name="tag",
+            name="name",
+            field=models.CharField(max_length=200, verbose_name="Название"),
         ),
         migrations.AlterField(
-            model_name='tag',
-            name='slug',
-            field=models.SlugField(max_length=200, null=True, unique=True, validators=[django.core.validators.RegexValidator('^[-a-zA-Z0-9_]+$')], verbose_name='Уникальный слаг'),
+            model_name="tag",
+            name="slug",
+            field=models.SlugField(
+                max_length=200,
+                null=True,
+                unique=True,
+                validators=[django.core.validators.RegexValidator("^[-a-zA-Z0-9_]+$")],
+                verbose_name="Уникальный слаг",
+            ),
         ),
     ]

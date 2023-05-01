@@ -5,20 +5,23 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('recipes', '0006_rename_tag_recipe_tags'),
+        ("recipes", "0006_rename_tag_recipe_tags"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='recipe',
-            name='time',
+            model_name="recipe",
+            name="time",
         ),
         migrations.AddField(
-            model_name='recipe',
-            name='cooking_time',
-            field=models.PositiveIntegerField(default=1, validators=[django.core.validators.MinValueValidator(1)], verbose_name='Время приготовления, мин'),
+            model_name="recipe",
+            name="cooking_time",
+            field=models.PositiveIntegerField(
+                default=1,
+                validators=[django.core.validators.MinValueValidator(1)],
+                verbose_name="Время приготовления, мин",
+            ),
             preserve_default=False,
         ),
     ]
