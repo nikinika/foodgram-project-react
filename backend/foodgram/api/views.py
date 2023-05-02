@@ -67,6 +67,19 @@ class UserView(
         serializer = SubscribeSerializer(page, many=True, context={"request": request})
 
         return self.get_paginated_response(serializer.data)
+    
+    @action(
+        detail=False,
+        methods=("get",),
+        url_path="favorites",
+        permission_classes=(permissions.IsAuthenticated,),
+    )
+    def subscribe_list(self, request):
+        queryset = Favorite.objects.filter(user=request.user)
+        page = self.paginate_queryset(queryset)
+        serializer = FavoriteSerializer(page, many=True, context={"request": request})
+
+        return self.get_paginated_response(serializer.data)
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -129,7 +142,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return Response(
             "No recipes in Shopping Lists", status=status.HTTP_400_BAD_REQUEST
         )
-
+    
 
 class ShoppingListViewSet(
     mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet

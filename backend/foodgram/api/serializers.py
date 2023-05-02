@@ -1,6 +1,3 @@
-import base64
-
-from django.core.files.base import ContentFile
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
@@ -235,17 +232,18 @@ class FavoriteSerializer(serializers.ModelSerializer):
     name = serializers.ReadOnlyField(
         source="recipe.name",
     )
-    image = serializers.ImageField(
+    image = Base64ImageField(
         source="recipe.image",
         read_only=True,
     )
     cooking_time = serializers.ReadOnlyField(
         source="recipe.cooking_time",
     )
+    ingredients = EngredientAmountSerializer(many=True, source="recipe.ingredients")
 
     class Meta:
         model = Favorite
-        fields = ("id", "name", "image", "cooking_time")
+        fields = ("id", "name", "image", "ingredients", "cooking_time")
 
     def validate(self, data):
         user = self.context.get("request").user
@@ -253,7 +251,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
         if Favorite.objects.filter(user=user, recipe=recipe).exists():
             raise serializers.ValidationError({"errors": "Recipe already in Favorite"})
         return data
-
+    
 
 class SubscribeRecipeSerializer(serializers.ModelSerializer):
 
