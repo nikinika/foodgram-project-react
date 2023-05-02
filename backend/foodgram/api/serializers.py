@@ -2,6 +2,7 @@ import base64
 
 from django.core.files.base import ContentFile
 from djoser.serializers import UserCreateSerializer, UserSerializer
+from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -108,9 +109,10 @@ class EngredientAmountSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "measurement_unit", "amount")
 
 
-class ReadRecipeSerializer(serializers.ModelSerializer):
+class RecipeReadSerializer(serializers.ModelSerializer):
     tags = TagSerializer(read_only=True, many=True)
     author = UserReadSerializer(read_only=True)
+    image = Base64ImageField()
     ingredients = EngredientAmountSerializer(many=True, source="recipe")
     is_favorite = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
@@ -161,20 +163,10 @@ class AddIngredientSerializer(serializers.ModelSerializer):
         )
 
 
-class Base64ImageField(serializers.ImageField):
-    def to_internal_value(self, data):
-        if isinstance(data, str) and data.startswith("data:image"):
-            format, imgstr = data.split(";base64,")
-            ext = format.split("/")[-1]
-            data = ContentFile(base64.b64decode(imgstr), name="temp." + ext)
-
-        return super().to_internal_value(data)
-
-
-class CreateEditRecipeSerializer(serializers.ModelSerializer):
+class RecipeWriteSerializer(serializers.ModelSerializer):
     ingredients = AddIngredientSerializer(many=True)
     author = serializers.PrimaryKeyRelatedField(read_only=True)
-    image = Base64ImageField(max_length=None, use_url=True)
+    image = Base64ImageField()
 
     class Meta:
         model = Recipe
@@ -187,11 +179,6 @@ class CreateEditRecipeSerializer(serializers.ModelSerializer):
             "text",
             "cooking_time",
         )
-
-    def validate(self, data):
-        if Recipe.objects.filter(name=data.get("name")).exists():
-            raise ValidationError("Not uniqe recipe")
-        return data
 
     def create_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
@@ -225,7 +212,7 @@ class CreateEditRecipeSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
     def to_representation(self, instance):
-        return ReadRecipeSerializer(
+        return RecipeReadSerializer(
             instance, context={"request": self.context.get("request")}
         ).data
 
@@ -233,7 +220,7 @@ class CreateEditRecipeSerializer(serializers.ModelSerializer):
 class ShoppingListSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField(source="recipe.id")
     name = serializers.ReadOnlyField(source="recipe.name")
-    image = serializers.CharField(source="recipe.image", read_only=True)
+    image = serializers.ImageField(source="recipe.image", read_only=True)
     cooking_time = serializers.ReadOnlyField(source="recipe.cooking_time")
 
     class Meta:
@@ -248,7 +235,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
     name = serializers.ReadOnlyField(
         source="recipe.name",
     )
-    image = serializers.CharField(
+    image = serializers.ImageField(
         source="recipe.image",
         read_only=True,
     )
@@ -269,6 +256,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
 
 
 class SubscribeRecipeSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Recipe
         fields = ("id", "name", "image", "cooking_time")
@@ -298,11 +286,11 @@ class SubscribeSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, data):
-        user = self.context.get("request").user.pk
-        author = self.context.get("author_id")
-        if int(user) == int(author):
+        user_id = self.context.get("request").user.pk
+        author_id = int(self.context.get("author_id"))
+        if user_id == author_id:
             raise serializers.ValidationError({"errors": "Denied"})
-        if Subscribe.objects.filter(user_id=user, author_id=author).exists():
+        if Subscribe.objects.filter(user_id=user_id, author_id=author_id).exists():
             raise serializers.ValidationError({"errors": "You`ve already Subscribed"})
         return data
 

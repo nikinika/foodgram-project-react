@@ -47,7 +47,7 @@ class Recipe(models.Model):
     name = models.CharField(max_length=200, verbose_name="Название")
 
     image = models.ImageField(
-        verbose_name="Изображение", upload_to="recipes/", blank=True
+        verbose_name="Изображение", upload_to="recipes/images/", blank=True
     )
 
     text = models.TextField(verbose_name="Описание")

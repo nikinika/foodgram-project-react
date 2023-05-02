@@ -12,9 +12,9 @@ from users.models import Subscribe, User
 
 from api.filters import IngredientFilter, RecipeFilter
 from api.permissions import AuthorOrReadOnly
-from api.serializers import (CreateEditRecipeSerializer, FavoriteSerializer,
+from api.serializers import (RecipeWriteSerializer, FavoriteSerializer,
                              IngredientSerializer, PasswordSetSerializer,
-                             ReadRecipeSerializer, RegistrationSerializer,
+                             RecipeReadSerializer, RegistrationSerializer,
                              ShoppingListSerializer, SubscribeSerializer,
                              TagSerializer, UserReadSerializer)
 
@@ -95,8 +95,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.request.method not in permissions.SAFE_METHODS:
-            return CreateEditRecipeSerializer
-        return ReadRecipeSerializer
+            return RecipeWriteSerializer
+        return RecipeReadSerializer
 
     @action(
         detail=False,
@@ -170,8 +170,7 @@ class FavoriteViewSet(
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
-        user = self.request.user.id
-        return Favorite.objects.filter(user=user)
+        return Favorite.objects.filter(user=self.request.user)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

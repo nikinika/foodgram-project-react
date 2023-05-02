@@ -25,7 +25,7 @@ SECRET_KEY = "p8bmjh#ddopv_ayk*mwdyvy0k8t(+up57@%oeug8cz)ku2l-nt"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    'corsheaders',
     "rest_framework.authtoken",
     "djoser",
     "django_filters",
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -151,7 +153,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": [
         "rest_framework.pagination.PageNumberPagination",
     ],
-    "PAGE_SIZE": 5,
+    "PAGE_SIZE": 6,
     "SEARCH_PARAM": "name",
 }
 
@@ -160,3 +162,10 @@ DJOSER = {
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_URLS_REGEX = r'^/api/.*$'
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+] 
