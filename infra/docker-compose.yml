@@ -19,7 +19,7 @@ services:
       - ./.env
 
   frontend:
-      image: nikinika/frontend:latest
+    image: nikinika/frontend:latest
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
