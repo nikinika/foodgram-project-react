@@ -59,7 +59,7 @@ jobs:
           script: |
             sudo docker-compose stop
             sudo docker-compose rm -f backend
-            sudo docker-compose rn -f frontend
+            sudo docker-compose rm -f frontend
             sudo docker pull nikinika/backend:latest
             sudo docker pull nikinika/frontend:latest
             rm .env
