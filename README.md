@@ -42,5 +42,11 @@
 
 http://51.250.21.175
 
+### Реквизиты суперюзера
+
+- login: admin
+- e-mail: admin@admin.ru
+- password: admin
+
 ### Разработчик:
 Никитенко Николай 
