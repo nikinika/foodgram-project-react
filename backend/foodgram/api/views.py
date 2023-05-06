@@ -4,9 +4,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from django_filters.rest_framework import DjangoFilterBackend
 
 from recipes.models import Favorite, Ingredient, Recipe, ShoppingList, Tag
 from users.models import Subscribe, User
