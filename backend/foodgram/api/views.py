@@ -6,6 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 
 from recipes.models import Favorite, Ingredient, Recipe, ShoppingList, Tag
 from users.models import Subscribe, User
@@ -41,7 +42,7 @@ class UserView(
     )
     def set_password(self, request):
         serializer = PasswordSetSerializer(request.user, data=request.data)
-        if serializer.is_valid(raise_exception=True):
+        if serializer.is_valid():
             serializer.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -67,19 +68,6 @@ class UserView(
         serializer = SubscribeSerializer(page, many=True, context={"request": request})
 
         return self.get_paginated_response(serializer.data)
-    
-    @action(
-        detail=False,
-        methods=("get",),
-        url_path="favorites",
-        permission_classes=(permissions.IsAuthenticated,),
-    )
-    def subscribe_list(self, request):
-        queryset = Favorite.objects.filter(user=request.user)
-        page = self.paginate_queryset(queryset)
-        serializer = FavoriteSerializer(page, many=True, context={"request": request})
-
-        return self.get_paginated_response(serializer.data)
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -100,11 +88,11 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     permission_classes = (
-        AuthorOrReadOnly,
-        IsAuthenticatedOrReadOnly,
+        AuthorOrReadOnly, permissions.IsAuthenticatedOrReadOnly,
     )
     pagination_class = PageNumberPagination
     filterset_class = RecipeFilter
+    search_fields = ('name',)
 
     def get_serializer_class(self):
         if self.request.method not in permissions.SAFE_METHODS:
@@ -142,7 +130,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return Response(
             "No recipes in Shopping Lists", status=status.HTTP_400_BAD_REQUEST
         )
-    
+
 
 class ShoppingListViewSet(
     mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet
