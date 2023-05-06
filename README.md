@@ -1,4 +1,4 @@
-
+![example workflow](https://github.com/nikinika/foodgram-project-react/actions/workflows/main.yml/badge.svg)
 
 ### Описание проекта:
 Проект представляет собой API для сервиса публикации рецептов приготовления блюд
