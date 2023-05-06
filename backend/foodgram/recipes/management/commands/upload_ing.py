@@ -16,6 +16,6 @@ class Command(BaseCommand):
             for row in reader:
                 Ingredient.objects.get_or_create(
                     name=row[0],
-                    measurement_unit=row[1]
-                        )
+                    measurement_unit=row[1])
+
         self.stdout.write("Engredients uploaded.")

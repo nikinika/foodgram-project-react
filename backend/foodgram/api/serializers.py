@@ -6,7 +6,6 @@ from rest_framework.exceptions import ValidationError
 from recipes.models import (Favorite, Ingredient, IngredRecipe, Recipe,
                             ShoppingList, Tag)
 from users.models import Subscribe, User
-from django.contrib.auth.hashers import check_password
 
 
 class UserReadSerializer(UserSerializer):
