@@ -3,8 +3,7 @@ from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from recipes.models import (Favorite, Ingredient, IngredRecipe, Recipe,
-                            ShoppingList, Tag)
+from recipes.models import Favorite, Ingredient, IngredRecipe, Recipe, ShoppingList, Tag
 from users.models import Subscribe, User
 from django.contrib.auth.hashers import check_password
 
@@ -25,13 +24,8 @@ class UserReadSerializer(UserSerializer):
 
     def get_is_subscribed(self, obj):
         request = self.context.get("request")
-        if (
-            request
-            and not request.user.is_anonymous
-        ):
-            return Subscribe.objects.filter(
-                user=request.user, author=obj
-            ).exists()
+        if request and not request.user.is_anonymous:
+            return Subscribe.objects.filter(user=request.user, author=obj).exists()
         return False
 
 
@@ -66,16 +60,15 @@ class PasswordSetSerializer(serializers.Serializer):
     new_password = serializers.CharField(required=True, label="Новый пароль")
 
     def update(self, instance, validated_data):
-        if not instance.check_password(validated_data['current_password']):
+        if validated_data["current_password"] == validated_data["new_password"]:
             raise serializers.ValidationError(
-                {'current_password': 'Wrong password.'}
+                {"new_password": "Equal passwords"}
             )
-        if (validated_data['current_password']
-           == validated_data['new_password']):
+        instance.set_password(validated_data["new_password"])
+        if not instance.check_password(validated_data["current_password"]):
             raise serializers.ValidationError(
-                {'new_password': 'Equal passwords'}
+                {"current_password": "Wrong current password."}
             )
-        instance.set_password(validated_data['new_password'])
         instance.save()
         return validated_data
 
@@ -135,18 +128,14 @@ class RecipeReadSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         return (
             request.user.is_authenticated
-            and Favorite.objects.filter(
-                user=request.user, recipe=obj
-            ).exists()
+            and Favorite.objects.filter(user=request.user, recipe=obj).exists()
         )
 
     def get_is_in_shopping_cart(self, obj):
         request = self.context.get("request")
         return (
             request.user.is_authenticated
-            and ShoppingList.objects.filter(
-                user=request.user, recipe=obj
-            ).exists()
+            and ShoppingList.objects.filter(user=request.user, recipe=obj).exists()
         )
 
 
@@ -255,7 +244,6 @@ class FavoriteSerializer(serializers.ModelSerializer):
 
 
 class SubscribeRecipeSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Recipe
         fields = ("id", "name", "image", "cooking_time")
