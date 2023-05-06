@@ -31,7 +31,7 @@
 #### 5. Примените миграции `$ docker-compose exec backend python manage.py migrate`
 #### 6. Соберите статику `$ docker-compose exec backend python manage.py collectstatic --no-input`
 #### 7. Для доступа к админке создайте суперюзера `$ docker-compose exec backend python manage.py createsuperuser`
-#### 8. Чтобы загрузить в базу данные об ингредиентах `$ docker-compose exec backend python manage.py load_ing`
+#### 8. Чтобы загрузить в базу данные об ингредиентах `$ docker-compose exec backend python manage.py upload_ing`
 
 
 ### Документация по эндпоинтам, запросам и ответам:
