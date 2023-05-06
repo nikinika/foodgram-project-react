@@ -14,14 +14,13 @@
 ### Как запустить проект:
 #### 1. Клонируте репозиторий `$ git clone git@github.com:nikinika/foodgram-project-react.git`
 #### 2. В директории `infra/`, командой `$touch .env`, создайте файл `.env` со следующими переменными
-- DJANGO_KEY='ваш secret_key django'
 - DB_ENGINE=django.db.backends.postgresql
 - DB_NAME= название БД
 - POSTGRES_USER= ваше имя пользователя
 - POSTGRES_PASSWORD= пароль для доступа к БД
 - DB_HOST=db
 - DB_PORT=5432
-- SECRET_KEY=<Тут должен быть секретный ключ из settings.py, но я не буду его писать>
+- SECRET_KEY=секретный ключ джанго
 - DEBUG=False
 - ALLOWED_HOSTS=*
 #### 3. В терминале находясь в папке `infra/` выполните комманду
