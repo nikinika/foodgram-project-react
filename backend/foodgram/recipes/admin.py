@@ -50,8 +50,8 @@ class ShoppingListAdmin(admin.ModelAdmin):
 
 
 class IngredRecipeAdmin(admin.ModelAdmin):
-    list_display = ("pk", "recipe", "ingredient")
-    list_editable = ("recipe", "ingredient")
+    list_display = ("pk", "recipe", "ingredient", "amount")
+    list_editable = ("recipe", "ingredient", "amount")
 
 
 admin.site.register(Recipe, RecipeAdmin)
