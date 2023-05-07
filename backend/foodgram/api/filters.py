@@ -26,6 +26,7 @@ class RecipeFilter(FilterSet):
             "tags",
             "author",
         )
+        always_filter = False
 
     def is_favorited_filter(self, queryset, name, value):
         user = self.request.user
