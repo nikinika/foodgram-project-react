@@ -11,11 +11,19 @@ from users.models import Subscribe, User
 
 from api.filters import IngredientFilter, RecipeFilter
 from api.permissions import AuthorOrReadOnly
-from api.serializers import (RecipeWriteSerializer, FavoriteSerializer,
-                             IngredientSerializer, PasswordSetSerializer,
-                             RecipeReadSerializer, RegistrationSerializer,
-                             ShoppingListSerializer, SubscribeSerializer,
-                             TagSerializer, UserReadSerializer)
+from api.serializers import (
+    RecipeWriteSerializer,
+    FavoriteSerializer,
+    IngredientSerializer,
+    PasswordSetSerializer,
+    RecipeReadSerializer,
+    RegistrationSerializer,
+    ShoppingListSerializer,
+    SubscribeSerializer,
+    TagSerializer,
+    UserReadSerializer,
+)
+from django_filters import rest_framework as filters
 
 
 class UserView(
@@ -86,11 +94,12 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     permission_classes = (
-        AuthorOrReadOnly, permissions.IsAuthenticatedOrReadOnly,
+        AuthorOrReadOnly,
+        permissions.IsAuthenticatedOrReadOnly,
     )
     pagination_class = PageNumberPagination
+    filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = RecipeFilter
-    search_fields = ('name',)
 
     def get_serializer_class(self):
         if self.request.method not in permissions.SAFE_METHODS:
