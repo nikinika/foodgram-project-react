@@ -7,7 +7,7 @@ from .models import (Favorite, Ingredient, IngredRecipe, Recipe, ShoppingList,
 class RecipeAdmin(admin.ModelAdmin):
     """Создание модели Рецепт Администратора для админа."""
 
-    list_display = ("pk", "name", "author", "pub_date", "tags", "fav_count")
+    list_display = ("pk", "name", "author", "pub_date", "fav_count")
     readonly_fields = ("fav_count",)
     list_filter = (
         "author",
