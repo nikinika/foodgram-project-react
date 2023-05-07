@@ -12,7 +12,7 @@ class IngredientFilter(FilterSet):
 
 
 class RecipeFilter(FilterSet):
-    tags = filters.AllValuesMultipleFilter(
+    tags = filters.ModelMultipleChoiceFilter(
         queryset=Tag.objects.all(),
         field_name="tags__slug",
         to_field_name="slug",
@@ -22,10 +22,7 @@ class RecipeFilter(FilterSet):
 
     class Meta:
         model = Recipe
-        fields = (
-            "tags",
-            "author",
-        )
+        fields = ("__all__",)
 
     def is_favorited_filter(self, queryset, name, value):
         user = self.request.user
