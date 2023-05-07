@@ -20,7 +20,7 @@
 - POSTGRES_PASSWORD= пароль для доступа к БД
 - DB_HOST=db
 - DB_PORT=5432
-- SECRET_KEY=селкутный ключ джанго
+- SECRET_KEY=<Тут должен быть секретный ключ из settings.py, но я не буду его писать>
 - DEBUG=False
 - ALLOWED_HOSTS=*
 #### 3. В терминале находясь в папке `infra/` выполните комманду
@@ -30,7 +30,7 @@
 #### 5. Примените миграции `$ docker-compose exec backend python manage.py migrate`
 #### 6. Соберите статику `$ docker-compose exec backend python manage.py collectstatic --no-input`
 #### 7. Для доступа к админке создайте суперюзера `$ docker-compose exec backend python manage.py createsuperuser`
-#### 8. Чтобы загрузить в базу данные об ингредиентах `$ docker-compose exec backend python manage.py load_ing`
+#### 8. Чтобы загрузить в базу данные об ингредиентах `$ docker-compose exec backend python manage.py upload_ing`
 
 
 ### Документация по эндпоинтам, запросам и ответам:
