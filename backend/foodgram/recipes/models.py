@@ -84,7 +84,7 @@ class IngredRecipe(models.Model):
     )
 
     amount = models.PositiveIntegerField(
-        verbose_name="Количество", validators=[MinValueValidator(0)]
+        verbose_name="Количество", validators=[MinValueValidator(1)]
     )
 
     class Meta:
