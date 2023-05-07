@@ -16,6 +16,7 @@ class RecipeFilter(FilterSet):
         queryset=Tag.objects.all(),
         field_name="tags__slug",
         to_field_name="slug",
+        exclude=True
     )
     is_favorited = filters.BooleanFilter(method="is_favorited_filter")
     is_in_shopping_cart = filters.BooleanFilter(method="is_in_shopping_cart_filter")
@@ -26,7 +27,6 @@ class RecipeFilter(FilterSet):
             "tags",
             "author",
         )
-        always_filter = False
 
     def is_favorited_filter(self, queryset, name, value):
         user = self.request.user
