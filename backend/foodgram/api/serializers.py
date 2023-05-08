@@ -136,7 +136,7 @@ class RecipeReadSerializer(serializers.ModelSerializer):
 
 class AddIngredientSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
-    amount = serializers.IntegerField()
+    amount = serializers.IntegerField
 
     class Meta:
         model = IngredRecipe
@@ -162,6 +162,12 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
             "text",
             "cooking_time",
         )
+
+    def validate(self, data):
+        amounts = data.get('ingredients')
+        if [number for number in amounts if number['amount'] < 1]:
+            raise serializers.ValidationError({
+                'amount': 'Minimum ingredient amount 1'})
 
     def create_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
